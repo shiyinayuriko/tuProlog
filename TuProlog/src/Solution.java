@@ -5,33 +5,35 @@ import alice.tuprolog.SolveInfo;
 import alice.tuprolog.Theory;
 import alice.tuprolog.Var;
 
-public class Example
+public class Solution
 {
 	public static void main( String[] args )
 	{
 		try
 		{
 			// load prolog data
-			Theory theory = new Theory( Example.class.getClassLoader().getResourceAsStream( "database_example.txt" ) );
+			Theory theory = new Theory( Solution.class.getClassLoader().getResourceAsStream( "database_solution.txt" ) );
 			
 			// combine prolog with our data
 			Prolog engine = new Prolog();
 			engine.setTheory(theory);
 			
-			// search X (module name) in our me's (module element) with module id 1569691
-			SolveInfo solution = engine.solve( "me(1569691,X)." );
+			String queryPassedModules = "passed(3483045,Y).";
+			String queryPassedModule = "passed(3483045,1569691).";
+			
+			SolveInfo solution = engine.solve( queryPassedModules );
 
 			// iterate over all found solutions
 			while( solution.isSuccess() )
 			{
 				if( solution.getBindingVars().size() < 1 )
 				{
-					// found no binding for result variable X
+					// found no binding
 					System.out.println( solution.toString() );
 				}
 				else 
 				{
-					// found binding for X
+					// found bindings
 					@SuppressWarnings( "rawtypes" )
 					Iterator it = solution.getBindingVars().iterator();
 					while( it.hasNext() )
