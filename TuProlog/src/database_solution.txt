@@ -2,19 +2,26 @@
  * prolog functions
  **/
 
-/** contains X **/
+/** list contains X **/
 member(X,[X|_]).
 member(X,[_|L]) :- member(X,L).
 
 passed(STUDENTID,ME) :- r(STUDENTID,ME,NOTE) , NOTE<5.
 
+failed(STUDENTID,ME) :- r(STUDENTID,ME,NOTE) , NOTE>4.
+
+repeater(SUTDENTID,ME) :- bagof(NOTE, failed(STUDENTID, ME), BAG), length(BAG, COUNT), COUNT<4.
+
+passedModule(STUDENTID,ME) :-  repeater(STUDENTID,ME), passed(STUDENTID,ME).
+
 /**
- * prolog data (like databases)
+ * prolog data (like a databases)
  **/
 
 /** module result from student **/
-r(3483045, 1569691, 3).
+r(3483045, 1569691, 6).
 r(3483045, 1569691, 5).
+r(3483045, 1569691, 2).
 
 /** students **/
 st(3483045, "Felix Wackernagel").

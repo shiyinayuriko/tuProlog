@@ -18,10 +18,17 @@ public class Solution
 			Prolog engine = new Prolog();
 			engine.setTheory(theory);
 			
+			// some example prolog terms
 			String queryPassedModules = "passed(3483045,Y).";
 			String queryPassedModule = "passed(3483045,1569691).";
 			
-			SolveInfo solution = engine.solve( queryPassedModules );
+			String queryFailedModules = "failed(3483045,Y).";
+			String queryFailedModule = "failed(3483045,1569691).";
+			
+			// maybe final solution
+			String passedModule = "passedModule(3483045,1569691).";
+			
+			SolveInfo solution = engine.solve( passedModule );
 
 			// iterate over all found solutions
 			while( solution.isSuccess() )
@@ -33,7 +40,7 @@ public class Solution
 				}
 				else 
 				{
-					// found bindings
+					// found bindings and now print there values
 					@SuppressWarnings( "rawtypes" )
 					Iterator it = solution.getBindingVars().iterator();
 					while( it.hasNext() )
