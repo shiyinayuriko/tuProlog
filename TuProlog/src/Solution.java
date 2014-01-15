@@ -26,10 +26,18 @@ public class Solution
 			String queryFailedModule = "failed(3483045,1569691).";
 			
 			// maybe final solution
-			String passedModule = "passedModule(3483045,1569691).";
+			//String passedModule = "passedModule(3483045,1569691).";
+			
+			//checks if Sascha has passed Mathe 1
+			//String passedModule = "passedModule(3333333,1569847).";
+			
+			//checks if Sascha has passed Datenbanken und Rechnernetze
+			String passedModule = "passedModule(3333333,1569756).";
 			
 			SolveInfo solution = engine.solve( passedModule );
-
+			
+			boolean no = true;
+			
 			// iterate over all found solutions
 			while( solution.isSuccess() )
 			{
@@ -37,6 +45,7 @@ public class Solution
 				{
 					// found no binding
 					System.out.println( solution.toString() );
+					no = false;
 				}
 				else 
 				{
@@ -62,6 +71,7 @@ public class Solution
 					break;
 				}
 			}
+			if(no == true) System.out.println("no");
 		} catch( Exception e )
 		{
 			System.out.println("tuProlog exception:" + e.getMessage());

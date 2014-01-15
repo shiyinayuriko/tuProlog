@@ -6,13 +6,25 @@
 member(X,[X|_]).
 member(X,[_|L]) :- member(X,L).
 
-passed(STUDENTID,ME) :- r(STUDENTID,ME,NOTE) , NOTE<5.
+/** check if the student has done all preconditions **/
+allowed(STUDENTID,[]).
+allowed(STUDENTID,[X|L]) :- r(STUDENTID,X,NOTE) , NOTE<5,allowed(STUDENTID,L).
+
+passed(STUDENTID,ME) :- r(STUDENTID,ME,NOTE) , NOTE<5, findall(PRE, p(ME,PRE), BAG), allowed(STUDENTID,BAG).
 
 failed(STUDENTID,ME) :- r(STUDENTID,ME,NOTE) , NOTE>4.
 
-repeater(SUTDENTID,ME) :- bagof(NOTE, failed(STUDENTID, ME), BAG), length(BAG, COUNT), COUNT<4.
+/** main clause **/
+passedModule(STUDENTID,ME) :- findall(SUBME, c(ME,SUBME), BAG), checkSubmodules(STUDENTID,BAG), repeats(STUDENTID,3,BAG), passed(STUDENTID,ME).
 
-passedModule(STUDENTID,ME) :-  repeater(STUDENTID,ME), passed(STUDENTID,ME).
+/** checks if the student has passed all required modules **/
+checkSubmodules(STUDENTID,[]).
+checkSubmodules(STUDENTID,[X|L]) :- checkSubmodules(STUDENTID,L),passed(STUDENTID,X).
+
+repeats(STUDENTID,_,[]).
+repeats(STUDENTID,N,[X|L]) :- findall(NOTE, failed(STUDENTID, X), BAG), length(BAG, COUNT),COUNT<N, checkrepeats(STUDENTID, N,L, COUNT).
+
+checkrepeats(STUDENTID,N,L,FAILSCOUNT) :- ((FAILSCOUNT < 2) -> repeats(STUDENTID,N,L);repeats(STUDENTID,2,L)).
 
 /**
  * prolog data (like a databases)
@@ -21,10 +33,44 @@ passedModule(STUDENTID,ME) :-  repeater(STUDENTID,ME), passed(STUDENTID,ME).
 /** module result from student **/
 r(3483045, 1569691, 6).
 r(3483045, 1569691, 5).
-r(3483045, 1569691, 2).
+r(3483045, 1569691, 4).
+r(3333333, 1569849, 2).
+r(3333333, 1569847, 1).
+
+r(3333333, 1569756, 2).
+r(3333333, 1569757, 5).
+r(3333333, 1569757, 5).
+r(3333333, 1569757, 1).
+r(3333333, 1569758, 5).
+/** if this clause is included, sascha doesn't meet the requirements to pass the modul 1569756 Db&Rn
+* because he then repeated 2 submodules in the module Db&Rn 2 times. **/
+/** r(3333333, 1569758, 5). **/
+r(3333333, 1569758, 2).
 
 /** students **/
-st(3483045, "Felix Wackernagel").
+st(3483945, "Felix Wackernagel").
+st(3333333, "Sascha Kath").
+
+/** module preconditions **/
+p(1569847,1569849).
+p(1569848,1569850).
+p(1569873,1569875).
+p(1569874,1569876).
+
+/** module components/submodules **/
+
+/** Mathe 1 **/
+c(1569846,1569847).
+c(1569846,1569848).
+/** Mathe 2 **/
+c(1569872,1569873).
+c(1569872,1569874).
+/** Technische Grundlagen **/
+c(1569889,1569890).
+c(1569889,1569891).
+/** Datenbanken und Rechnernetze**/
+c(1569756,1569757).
+c(1569756,1569758).
 
 /** modules **/
 me(1569691,"INF-B-210 Algorithmen und Datenstrukturen").
